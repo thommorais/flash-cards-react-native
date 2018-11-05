@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="13px" viewBox="0 0 17 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M12.7739544,21.4281327 L7.24894897,15.9031273 C6.91701701,15.5711954 6.91701701,15.0330054 7.24894897,14.7010402 L8.45100288,13.4989531 C8.78293485,13.166988 9.32115803,13.166988 9.65308999,13.4989531 L13.3749979,17.2208279 L21.34691,9.24894897 C21.678842,8.91701701 22.2170652,8.91701701 22.5489971,9.24894897 L23.751051,10.4510361 C24.082983,10.782968 24.082983,11.321158 23.751051,11.6531232 L13.9760415,21.4281659 C13.6440763,21.7600979 13.1058863,21.7600979 12.7739544,21.4281327 Z" id="path-1"></path>
+    </defs>
+    <g id="Deck-Creation" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-4" transform="translate(-7.000000, -9.000000)">
+            <rect id="Rectangle-5" stroke-opacity="0" stroke="#FFFFFF" fill-rule="nonzero" x="0.5" y="0.5" width="29" height="29" rx="3"></rect>
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>
