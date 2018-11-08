@@ -1,31 +1,38 @@
 import React, {PureComponent} from 'react';
-import { connect } from 'react-redux'
-import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import ProgressBar from './ProgressBar'
-import { pink, white, purple, yellow, green,  eletricBlue} from '../utils'
+import { pink, white, eletricBlue} from '../utils'
 import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
+import { withNavigation } from 'react-navigation'
+import {deleteDeck} from '../actions'
+import {connect} from 'react-redux'
 
-export default class DeckLink extends PureComponent {
+class DeckLink extends PureComponent {
+
+  deleteDeckById = () => {
+    const {id} = this.props.data
+    this.props.deleteDeckById(id)
+  }
+
+  editDeckById = () => {
+    const {id} = this.props.data
+    this.props.navigation.navigate('CreateDeck', {id, mode: 'edit'})
+  }
 
   navigate = () => {
-    const id = parseInt((Math.random() * 100) + 1)
-    this.props.navigation.navigate('Quiz', {id})
+    const {data} = this.props
+    this.props.navigation.navigate('Deck', {data})
   }
 
   render() {
-
-    const { theme } = this.props
-
+    const { theme, data } = this.props
     const TextColor = theme === 'yellow' ? eletricBlue : white
 
     return (
       <View style={[styles.wrapper, {position: 'relative'}]}>
 
         <View style={[styles.deckLink, sharedStyles[theme]]}>
-            <View style={sharedStyles.padding}>
-                <ProgressBar theme={theme} size="full" />
-            </View>
 
             <View style={sharedStyles.padding}>
                 <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
@@ -33,28 +40,18 @@ export default class DeckLink extends PureComponent {
                 </Text>
 
                 <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
-                    Harry Potter
+                    {data.subject}
                 </Text>
             </View>
 
             <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
 
-                <TouchableOpacity onPress={this.navigate.bind(this)}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
+                <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
                     <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
-                        Start Quiz
+                        Go to the deck
                     </Text>
                     <FontAwesome name='caret-right' size={30} color={theme === 'purple' ? pink : white} />
                 </TouchableOpacity>
-
-                <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={[sharedStyles.buttonTool, {borderColor: buttonBgColor[theme]}]}>
-                        <FontAwesome name='trash' size={20} color={buttonBgColor[theme]} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[sharedStyles.buttonTool, {borderColor: buttonBgColor[theme], marginLeft: 16}]}>
-                        <FontAwesome name='pencil' size={20} color={buttonBgColor[theme]} />
-                    </TouchableOpacity>
-                </View>
-
             </View>
         </View>
 
@@ -65,6 +62,7 @@ export default class DeckLink extends PureComponent {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
 
@@ -87,3 +85,22 @@ const styles = StyleSheet.create({
     },
 
 });
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteDeckById: id => dispatch(deleteDeck(id))
+  }
+}
+
+function mapStateToProps({decks}) {
+  return { decks }
+}
+
+export default withNavigation(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DeckLink))
+
+
+

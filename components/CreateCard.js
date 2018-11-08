@@ -4,10 +4,12 @@ import {eletricBlue, pink, white, yellow } from '../utils'
 import CheckBox from 'react-native-checkbox'
 import { sharedStyles } from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
+import {connect} from 'react-redux'
+import {deleteCard} from '../actions'
 
-export default class CreateCard extends PureComponent {
+class CreateCard extends PureComponent {
 
- state ={
+ state = {
      question: '',
      answer: '',
      typeOfQuestion: 'objective',
@@ -145,3 +147,19 @@ const styles = StyleSheet.create({
 
 
 });
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteCardById: id => dispatch(deleteCard(id))
+  }
+}
+
+function mapStateToProps({cards}) {
+  return { cards }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateCard)

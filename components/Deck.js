@@ -1,207 +1,152 @@
 import React, {PureComponent} from 'react';
-import { TouchableOpacity, Text, StyleSheet, ScrollView, View, Image } from 'react-native'
-import {eletricBlue, pink, white, green} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
+import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native'
 import ProgressBar from './ProgressBar'
+import { pink, white, eletricBlue} from '../utils'
+import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
+import { withNavigation } from 'react-navigation'
+import {deleteDeck} from '../actions'
+import {connect} from 'react-redux'
 
-export default class Deck extends PureComponent {
+class Deck extends PureComponent {
+
+  deleteDeckById = () => {
+    const {id} = this.props.navigation.state.params.data
+    this.props.deleteDeckById(id)
+  }
+
+  editDeckById = () => {
+    const {id} = this.props.navigation.state.params.data
+    this.props.navigation.navigate('CreateDeck', {id, mode: 'edit'})
+  }
+
+  navigate = () => {
+    const {data} = this.props.navigation.state.params
+    this.props.navigation.navigate('Quiz', {data})
+  }
 
   render() {
-
-    const { navigation } = this.props
-    const { params } = navigation.state
-
-    const theme = 'pink'
+    const {data} = this.props.navigation.state.params
+    const {theme} = data
+    const TextColor = theme === 'yellow' ? eletricBlue : white
 
     return (
-      <View style={{backgroundColor:eletricBlue, flex: 1 }}>
-        <View style={[styles.header, sharedStyles.padding]}>
-          <Text style={styles.title}>
-              Harry Potter  { params.id }
-          </Text>
-          <View style={styles.progressBar}>
-            <ProgressBar theme={theme} size="half" />
-          </View>
-        </View>
 
+      <View style={{flex: 1, backgroundColor: eletricBlue}}>
         <ScrollView contentContainerStyle={styles.container}>
+           <View style={[styles.wrapper, {position: 'relative'}]}>
 
-          <View style={[styles.cardWrapper]}>
+             <View style={[styles.deckLink, sharedStyles[theme]]}>
+                 <View style={sharedStyles.padding}>
+                     <ProgressBar theme={theme} size="full" data={{numerator: data.answered, denominator: data.cards.length}} />
+                 </View>
 
-            <View style={[styles.card, sharedStyles.padding, styles.congrats, {height: 320}]}>
-              <Image
-                source={require('../assets/comemoration.png')}
-              />
-            </View>
+                 <View style={sharedStyles.padding}>
+                     <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
+                         Subject:
+                     </Text>
 
-          </View>
+                     <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
+                         {data.subject}
+                     </Text>
+                 </View>
 
-          <View style={[styles.cardWrapper]}>
+                 <View style={[sharedStyles.padding, {paddingTop: 10, flexDirection: 'row', justifyContent: 'flex-start'}]}>
+                     <View>
+                         <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
+                             Number of cards:
+                         </Text>
 
-            <View style={[styles.card, sharedStyles.padding]}>
-              <Text style={styles.bodyCopy}>
-                In Harry Potter and the Goblet of Fire, Harry Potter finally kisses Hermione Granger after the Tri-Wizard Tournament.
-              </Text>
+                         <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
+                             {data.cards.length}
+                         </Text>
+                      </View>
+                     <View style={{marginLeft: 40}}>
+                         <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
+                             Score:
+                         </Text>
 
-              <View style={{flexDirection: 'row', marginTop: 40}}>
-               <TouchableOpacity style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
-                  <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], fontSize: 24, marginRight: 30 }]}>
-                     Check
-                  </Text>
-                  <FontAwesome name='caret-right' size={30} color={theme === 'purple' ?  pink : white} />
-                </TouchableOpacity>
-              </View>
-            </View>
+                         <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
+                             {data.score.toFixed(1).replace(/\.0$/, '')}/10
+                         </Text>
+                      </View>
+                 </View>
 
-            <View style={[sharedStyles.firstShadow, sharedStyles.shadow, styles.shadow]} />
-            <View style={[sharedStyles.lastShadow, sharedStyles.shadow, styles.shadow]} />
-          </View>
+                 <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
 
-          <View style={[styles.cardWrapper]}>
+                     <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
+                         <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
+                             Start Quiz
+                         </Text>
+                         <FontAwesome name='caret-right' size={30} color={theme === 'purple' ? pink : white} />
+                     </TouchableOpacity>
 
-            <View style={[styles.card, sharedStyles.padding]}>
-              <Text style={styles.bodyCopy}>
-                In Harry Potter and the Goblet of Fire, Harry Potter finally kisses Hermione Granger after the Tri-Wizard Tournament.
-              </Text>
-              <View style={{flexDirection: 'row', marginTop: 30, justifyContent: 'space-around'}}>
-                <TouchableOpacity style={[sharedStyles.callToAction, {backgroundColor: green }]}>
-                  <Text style={[sharedStyles.callToActionText, {fontSize: 24 }]}>
-                    👍 True
-                  </Text>
-                </TouchableOpacity>
+                     <View style={{flexDirection: 'row'}}>
+                         <TouchableOpacity onPress={this.deleteDeckById} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor[theme]}]}>
+                             <FontAwesome name='trash' size={20} color={buttonBgColor[theme]} />
+                         </TouchableOpacity>
+                         <TouchableOpacity onPress={this.editDeckById} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor[theme], marginLeft: 16}]}>
+                             <FontAwesome name='pencil' size={20} color={buttonBgColor[theme]} />
+                         </TouchableOpacity>
+                     </View>
+                 </View>
+             </View>
 
-                <TouchableOpacity style={[sharedStyles.callToAction]}>
-                  <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], fontSize: 24}]}>
-                    👎 False
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+             <View style={[sharedStyles.firstShadow, sharedStyles.shadow, sharedStyles[theme]]} />
+             <View style={[sharedStyles.lastShadow, sharedStyles.shadow, sharedStyles[theme]]} />
 
-          </View>
-
-          <View style={[styles.cardWrapper]}>
-            <View style={[styles.card, sharedStyles.padding]}>
-
-                <View>
-                  <Text style={styles.answerLabel}>
-                    Answer:
-                  </Text>
-                  <Text style={styles.bodyCopy}>
-                    A Lion
-                  </Text>
-                </View>
-
-              <View style={{marginTop: 90}}>
-                <Text style={styles.answerLabel}>
-                  And yout get it?
-                </Text>
-
-                <View style={{flexDirection: 'row', marginTop: 20}}>
-                  <TouchableOpacity style={[sharedStyles.callToAction, {backgroundColor: green }]}>
-                    <Text style={[sharedStyles.callToActionText, {fontSize: 24 }]}>
-                      👍 Right
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={[sharedStyles.callToAction, {marginLeft: 15}]}>
-                    <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], fontSize: 24}]}>
-                      👎 Wrong
-                    </Text>
-                  </TouchableOpacity>
-
-                </View>
-
-              </View>
-
-            </View>
-          </View>
-
-          </ScrollView>
+           </View>
+        </ScrollView>
       </View>
+
     );
   }
 }
 
+
 const styles = StyleSheet.create({
 
-  container: {
-    position: "relative",
-    backgroundColor: eletricBlue,
-    paddingTop: 15,
-    paddingBottom: 15
-  },
+    subject: {
+        color: white,
+    },
 
-  congrats : {
-    backgroundColor: green,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
+    container: {
+        position: "relative",
+        backgroundColor: eletricBlue,
+        paddingTop: 15,
+        paddingBottom: 15
+    },
 
-  answerLabel: {
-    color: pink,
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
+    wrapper: {
+        position: 'relative',
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        marginBottom: 20,
+    },
 
-  progressBar: {
-    width: '35%',
-  },
-
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: white
-  },
-
-  cardWrapper: {
-    position: "relative",
-    marginTop: 40,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-
-  card: {
-    position: "relative",
-    zIndex:3,
-    borderRadius: 12,
-    backgroundColor: white,
-    minHeight: 150
-  },
-
-  header: {
-    position: 'relative',
-    zIndex: 3,
-    paddingTop: 20,
-    paddingBottom: 20,
-    justifyContent: 'space-between',
-    backgroundColor: pink,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  body: {
-    backgroundColor: white,
-    borderBottomLeftRadius:12,
-    borderBottomRightRadius:12,
-  },
-
-  bodyCopy: {
-    fontSize: 32
-  },
-
-  shadow: {
-    backgroundColor: white
-  },
-
-  wrapper: {
-      position: 'relative',
-      marginLeft: 20,
-      marginRight: 20,
-      marginTop: 10,
-      marginBottom: 20,
-  },
+    deckLink: {
+        position: "relative",
+        zIndex: 4,
+        borderRadius: 12,
+    },
 
 });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteDeckById: id => dispatch(deleteDeck(id))
+  }
+}
+
+function mapStateToProps({decks}) {
+  return { decks }
+}
+
+export default withNavigation(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Deck))
+
+
+

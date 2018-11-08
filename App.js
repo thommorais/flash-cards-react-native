@@ -1,15 +1,17 @@
 import React from 'react';
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import reducer from './reducers'
-import { createStackNavigator } from 'react-navigation'
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import DecksList from './components/DecksList'
 import Deck from './components/Deck'
+import CardsList from './components/CardsList'
+import Quiz from './components/Quiz'
 import CreateDeck from './components/CreateDeck'
 import CreateCard from './components/CreateCard'
-import { fromTop } from 'react-navigation-transitions';
-import {Easing, Animated} from 'react-native'
-import { pink, white, purple, yellow, green,  eletricBlue} from './utils'
+import {Easing, Animated, StatusBar, View} from 'react-native'
+import { white, purple, pink} from './utils'
 
 const transitionConfig = () => {
   return {
@@ -67,7 +69,7 @@ const headerStyles = {
   gesturesEnabled: true
 }
 
-const MainNavigator = createStackNavigator({
+const DecksTabs = createStackNavigator({
 
   DeckList: {
     screen: DecksList,
@@ -77,10 +79,18 @@ const MainNavigator = createStackNavigator({
     },
   },
 
-  Quiz: {
+  Deck: {
     screen: Deck,
     navigationOptions: {
-      title: 'Decks',
+      title: 'Deck',
+      ...headerStyles
+    },
+  },
+
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: 'Quiz',
       ...headerStyles
     },
   },
@@ -104,13 +114,74 @@ const MainNavigator = createStackNavigator({
 },{
     initialRouteName: 'DeckList',
     transitionConfig,
-  })
+})
+
+const CardsTabs = createStackNavigator({
+
+  Cards: {
+    screen: CardsList,
+    navigationOptions: {
+      title: 'Cards',
+      ...headerStyles
+    },
+  },
+
+},{
+    initialRouteName: 'Cards',
+    transitionConfig,
+})
+
+
+const MainNavigator = createBottomTabNavigator({
+  Decks: {
+    screen: DecksTabs,
+    navigationOptions: {
+      tabBarLabel: 'Decks',
+      // tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+    },
+  },
+  Cards: {
+    screen: CardsTabs,
+    navigationOptions: {
+      tabBarLabel: 'Cards',
+      // tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+    },
+  }
+},{
+    initialRouteName: 'Decks',
+    tabBarOptions: {
+      activeTintColor: pink,
+      inactiveTintColor: white,
+      labelStyle: {
+        fontSize: 20,
+      },
+      style: {
+        backgroundColor: purple,
+      }
+    },
+})
+
+const store = createStore(
+  reducer,
+  applyMiddleware(thunkMiddleware)
+)
+
+function FlasCardsStatusBar () {
+  return (
+    <View>
+      <StatusBar translucent backgroundColor={purple} barStyle="light-content" />
+    </View>
+  )
+}
 
 export default class App extends React.Component {
   render() {
     return (
-      <Provider store={createStore(reducer)}>
+      <Provider store={store}>
+        <View style={{flex: 1}}>
+          <FlasCardsStatusBar />
           <MainNavigator />
+        </View>
       </Provider>
     );
   }

@@ -103,14 +103,22 @@ export const sharedStyles = StyleSheet.create({
         paddingBottom: 15,
         paddingLeft: 20,
         paddingRight: 20,
-        justifyContent: 'space-between',
-        backgroundColor: pink,
+        justifyContent: 'flex-end',
+        backgroundColor: purple,
         flexDirection: 'row',
         alignItems: 'center',
         shadowColor: eletricBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
     },
+
+
+    headerButtonText: {
+        color: white,
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+
 
 });
 
