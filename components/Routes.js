@@ -1,4 +1,4 @@
-
+import React from 'react'
 import DecksList from './DecksList'
 import Deck from './Deck'
 import CardsList from './CardsList'
@@ -9,6 +9,7 @@ import Finalization from './Finalization'
 import { white, purple, pink } from '../utils'
 import {Easing, Animated } from 'react-native'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
 const transitionConfig = () => {
   return {
@@ -117,14 +118,14 @@ const MainNavigator = createBottomTabNavigator({
     screen: DecksTabs,
     navigationOptions: {
       tabBarLabel: 'Decks',
-      // tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='library-books' size={30} color={tintColor} />
     },
   },
   Cards: {
     screen: CardsTabs,
     navigationOptions: {
       tabBarLabel: 'Cards',
-      // tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='cards' size={30} color={tintColor} />
     },
   }
 },{

@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import { TouchableOpacity, Text, StyleSheet, ScrollView, View, TextInput } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, ScrollView, View, TextInput, KeyboardAvoidingView } from 'react-native'
 import {eletricBlue, pink, white, yellow } from '../utils'
 import CheckBox from 'react-native-checkbox'
 import { sharedStyles } from '../style'
@@ -44,7 +44,7 @@ class CardCreate extends PureComponent {
  }
 
  editMode(card){
-     this.setState( () => ({...card, points: parseInt(card.points)}))
+     this.setState( () => ({...card, points: card.points}))
  }
 
  componentDidMount(){
@@ -52,9 +52,8 @@ class CardCreate extends PureComponent {
      if(this.props.navigation.state.params.mode === 'edit'){
          this.editMode(this.props.navigation.state.params.card)
      }else{
-        this.setState( () => ({
-            id: Date.now()
-        }))
+         const id = Date.now()
+        this.setState( () => ({id}))
      }
 
  }
@@ -67,102 +66,106 @@ class CardCreate extends PureComponent {
     return (
       <View style={{flex: 1, backgroundColor: eletricBlue}}>
 
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={sharedStyles.padding}>
-                <Text style={[sharedStyles.label, styles.label]}>
-                    Type of the question:
-                </Text>
-                <View style={{marginTop: 20}}>
-                    <CheckBox
-                        label='true or false'
-                        checked={type === 'boolean'}
-                        checkedImage={require('../assets/checked.png')}
-                        checkboxStyle={[styles.checkBox]}
-                        labelStyle={[sharedStyles.label, {color: white, fontSize:20}]}
-                        onChange={ () => this.settype('boolean') }
-                    />
-                    <CheckBox
-                        label='Objective'
-                        checked={type === 'objective'}
-                        checkedImage={require('../assets/checked.png')}
-                        checkboxStyle={[styles.checkBox, {marginTop: 10}]}
-                        labelStyle={[sharedStyles.label, {color: white,fontSize:20, marginTop: 10}]}
-                        onChange={ () => this.settype('objective') }
+        <ScrollView>
+            <KeyboardAvoidingView style={[styles.container, {paddingBottom: 80}]} behavior="position" enabled>
+
+                <View style={sharedStyles.padding}>
+                    <Text style={[sharedStyles.label, styles.label]}>
+                        Type of the question:
+                    </Text>
+                    <View style={{marginTop: 20}}>
+                        <CheckBox
+                            label='true or false'
+                            checked={type === 'boolean'}
+                            checkedImage={require('../assets/checked.png')}
+                            checkboxStyle={[styles.checkBox]}
+                            labelStyle={[sharedStyles.label, {color: white, fontSize:20}]}
+                            onChange={ () => this.settype('boolean') }
+                        />
+                        <CheckBox
+                            label='Objective'
+                            checked={type === 'objective'}
+                            checkedImage={require('../assets/checked.png')}
+                            checkboxStyle={[styles.checkBox, {marginTop: 10}]}
+                            labelStyle={[sharedStyles.label, {color: white,fontSize:20, marginTop: 10}]}
+                            onChange={ () => this.settype('objective') }
+                        />
+                    </View>
+                </View>
+
+                <View style={sharedStyles.padding}>
+                    <Text style={[sharedStyles.label, styles.label]}>
+                        Question:
+                    </Text>
+                    <TextInput
+                        multiline={true}
+                        style={styles.inputText}
+                        placeholder="What is the name of doctor who?"
+                        placeholderTextColor={'#384B62'}
+                        onChangeText={(question) => this.setState({question})}
+                        value={question}
                     />
                 </View>
-            </View>
 
-            <View style={sharedStyles.padding}>
-                <Text style={[sharedStyles.label, styles.label]}>
-                    Question:
-                </Text>
-                <TextInput
-                    multiline={true}
-                    style={styles.inputText}
-                    placeholder="What is the name of doctor who?"
-                    placeholderTextColor={'#384B62'}
-                    onChangeText={(question) => this.setState({question})}
-                    value={question}
-                />
-            </View>
+                <View style={sharedStyles.padding}>
+                    <Text style={[sharedStyles.label, styles.label]}>
+                        Answer:
+                    </Text>
+                    { type  === 'objective' &&  <TextInput
+                        style={styles.inputText}
+                        multiline={true}
+                        placeholder="Mildred?"
+                        placeholderTextColor={'#384B62'}
+                        onChangeText={(answer) => this.setState({answer})}
+                        value={(answer === true || answer === false) ? '' : answer}
+                    />}
+                    { type  === 'boolean' && <View style={{marginTop: 20, flexDirection : 'row'}}>
+                        <CheckBox
+                            label='true'
+                            checked={booleanAnswer}
+                            checkedImage={require('../assets/checked.png')}
+                            checkboxStyle={[styles.checkBox]}
+                            labelStyle={[sharedStyles.label, {color: white, fontSize:20}]}
+                            onChange={ () => this.setState({booleanAnswer: true}) }
+                        />
+                        <CheckBox
+                            label='false'
+                            checked={!booleanAnswer}
+                            checkedImage={require('../assets/checked.png')}
+                            checkboxStyle={[styles.checkBox, { marginLeft: 20}]}
+                            labelStyle={[sharedStyles.label, {color: white,fontSize:20}]}
+                            onChange={ () => this.setState({booleanAnswer: false}) }
+                        />
+                    </View>}
 
-            <View style={sharedStyles.padding}>
-                <Text style={[sharedStyles.label, styles.label]}>
-                    Answer:
-                </Text>
-                { type  === 'objective' &&  <TextInput
-                    style={styles.inputText}
-                    multiline={true}
-                    placeholder="Mildred?"
-                    placeholderTextColor={'#384B62'}
-                    onChangeText={(answer) => this.setState({answer})}
-                    value={(answer === true || answer === false) ? '' : answer}
-                />}
-                { type  === 'boolean' && <View style={{marginTop: 20, flexDirection : 'row'}}>
-                    <CheckBox
-                        label='true'
-                        checked={booleanAnswer}
-                        checkedImage={require('../assets/checked.png')}
-                        checkboxStyle={[styles.checkBox]}
-                        labelStyle={[sharedStyles.label, {color: white, fontSize:20}]}
-                        onChange={ () => this.setState({booleanAnswer: true}) }
-                    />
-                    <CheckBox
-                        label='false'
-                        checked={!booleanAnswer}
-                        checkedImage={require('../assets/checked.png')}
-                        checkboxStyle={[styles.checkBox, { marginLeft: 20}]}
-                        labelStyle={[sharedStyles.label, {color: white,fontSize:20}]}
-                        onChange={ () => this.setState({booleanAnswer: false}) }
-                    />
-                </View>}
-
-            </View>
-
-            <View style={sharedStyles.padding}>
-                <Text style={[sharedStyles.label, styles.label]}>
-                    Points:
-                </Text>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="100"
-                    placeholderTextColor={'#384B62'}
-                    onChangeText={(points) => this.setState({points: points})}
-                    value={`${points}`}
-                    keyboardType='numeric'
-                />
-            </View>
-
-            {question && hasAnswer && (
-                <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
-                    <TouchableOpacity onPress={this.saveCard} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
-                        <Text style={[sharedStyles.callToActionText, {color: white, marginRight: 30 }]}>
-                            Submit
-                        </Text>
-                        <FontAwesome name='caret-right' size={30} color={white} />
-                    </TouchableOpacity>
                 </View>
-            )}
+
+                <View style={sharedStyles.padding}>
+                    <Text style={[sharedStyles.label, styles.label]}>
+                        Points:
+                    </Text>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="100"
+                        placeholderTextColor={'#384B62'}
+                        onChangeText={(points) => this.setState({points: points})}
+                        value={`${points}`}
+                        keyboardType='numeric'
+                    />
+                </View>
+
+                {question && hasAnswer && points && (
+                    <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+                        <TouchableOpacity onPress={this.saveCard} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
+                            <Text style={[sharedStyles.callToActionText, {color: white, marginRight: 30 }]}>
+                                Submit
+                            </Text>
+                            <FontAwesome name='caret-right' size={30} color={white} />
+                        </TouchableOpacity>
+                    </View>
+                )}
+
+            </KeyboardAvoidingView>
 
         </ScrollView>
       </View>
@@ -199,7 +202,6 @@ const styles = StyleSheet.create({
       paddingBottom: 5,
       color: white,
   }
-
 
 });
 
