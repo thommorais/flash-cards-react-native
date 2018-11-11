@@ -19,7 +19,7 @@ The app is built with React Native and was developed for **iOS only**.
 
 * npm package manager
 * `EXPO`
-* Editor / IDE
+* Code Editor
 * Xcode (for the iOS simulator)
 
 **External Libraries used in this Project:**
@@ -31,14 +31,14 @@ The app is built with React Native and was developed for **iOS only**.
 
 #### Getting Started
 
-To get started with this repository:
+To get started:
 
 ```sh
 
 # git clone with ssh
 https://github.com/thommorais/flash-cards-react-native
 
-# change directory into the cloned repo
+# change directory into the cloned repository
 cd flash-cards-react-native
 
 # install the dependencies
