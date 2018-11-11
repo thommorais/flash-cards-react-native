@@ -5,27 +5,64 @@ import CheckBox from 'react-native-checkbox'
 import { sharedStyles } from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import {connect} from 'react-redux'
-import {deleteCard} from '../actions'
+import {deleteCard, editCard, createCard} from '../actions'
 
-class CreateCard extends PureComponent {
+class CardCreate extends PureComponent {
 
  state = {
+     id: 0,
      question: '',
      answer: '',
-     typeOfQuestion: 'objective',
-     booleanAnswer: false,
-     trueOrFalse: false,
-     objective: true
+     type: 'objective',
+     booleanAnswer: null,
+     objective: '',
+     points: ''
  }
 
- setTypeOfQuestion = type => {
-    this.setState( () => ({ typeOfQuestion : type}) )
+ settype = type => {
+    this.setState( () => ({type}) )
+ }
+
+ saveCard = () =>{
+
+    const {type, booleanAnswer} =  this.state
+    const answer = (type === 'boolean') ? booleanAnswer : this.state.answer
+
+    if(this.props.navigation.state.params.mode === 'edit'){
+        this.props.editCard({...this.state, answer, points: parseInt(this.state.points)})
+    } else {
+       this.props.createCard({...this.state, answer, points: parseInt(this.state.points)})
+    }
+
+    if(this.props.navigation.state.params.callback){
+        const {id, points} = this.state
+        this.props.navigation.state.params.callback(id, parseInt(points))
+    }
+
+    this.props.navigation.goBack()
+
+ }
+
+ editMode(card){
+     this.setState( () => ({...card, points: parseInt(card.points)}))
+ }
+
+ componentDidMount(){
+
+     if(this.props.navigation.state.params.mode === 'edit'){
+         this.editMode(this.props.navigation.state.params.card)
+     }else{
+        this.setState( () => ({
+            id: Date.now()
+        }))
+     }
+
  }
 
   render() {
 
-    const {typeOfQuestion, answer, booleanAnswer} = this.state
-    const {navigation} = this.props
+    const {type, answer, booleanAnswer, question, points} = this.state
+    const hasAnswer = type === 'boolean' ? true : answer
 
     return (
       <View style={{flex: 1, backgroundColor: eletricBlue}}>
@@ -38,19 +75,19 @@ class CreateCard extends PureComponent {
                 <View style={{marginTop: 20}}>
                     <CheckBox
                         label='true or false'
-                        checked={typeOfQuestion === 'boolean'}
+                        checked={type === 'boolean'}
                         checkedImage={require('../assets/checked.png')}
                         checkboxStyle={[styles.checkBox]}
                         labelStyle={[sharedStyles.label, {color: white, fontSize:20}]}
-                        onChange={ () => this.setTypeOfQuestion('boolean') }
+                        onChange={ () => this.settype('boolean') }
                     />
                     <CheckBox
                         label='Objective'
-                        checked={typeOfQuestion === 'objective'}
+                        checked={type === 'objective'}
                         checkedImage={require('../assets/checked.png')}
                         checkboxStyle={[styles.checkBox, {marginTop: 10}]}
                         labelStyle={[sharedStyles.label, {color: white,fontSize:20, marginTop: 10}]}
-                        onChange={ () => this.setTypeOfQuestion('objective') }
+                        onChange={ () => this.settype('objective') }
                     />
                 </View>
             </View>
@@ -60,11 +97,12 @@ class CreateCard extends PureComponent {
                     Question:
                 </Text>
                 <TextInput
+                    multiline={true}
                     style={styles.inputText}
-                    placeholder="Insert a good name here"
+                    placeholder="What is the name of doctor who?"
                     placeholderTextColor={'#384B62'}
                     onChangeText={(question) => this.setState({question})}
-                    value={this.state.question}
+                    value={question}
                 />
             </View>
 
@@ -72,14 +110,15 @@ class CreateCard extends PureComponent {
                 <Text style={[sharedStyles.label, styles.label]}>
                     Answer:
                 </Text>
-                { typeOfQuestion === 'objective' &&  <TextInput
+                { type  === 'objective' &&  <TextInput
                     style={styles.inputText}
-                    placeholder="Insert a good name here"
+                    multiline={true}
+                    placeholder="Mildred?"
                     placeholderTextColor={'#384B62'}
                     onChangeText={(answer) => this.setState({answer})}
-                    value={this.state.answer}
+                    value={(answer === true || answer === false) ? '' : answer}
                 />}
-                { typeOfQuestion === 'boolean' && <View style={{marginTop: 20, flexDirection : 'row'}}>
+                { type  === 'boolean' && <View style={{marginTop: 20, flexDirection : 'row'}}>
                     <CheckBox
                         label='true'
                         checked={booleanAnswer}
@@ -100,14 +139,30 @@ class CreateCard extends PureComponent {
 
             </View>
 
-            <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
-                <TouchableOpacity onPress={() => navigation.navigate('Quiz')} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
-                    <Text style={[sharedStyles.callToActionText, {color: white, marginRight: 30 }]}>
-                        Submit
-                    </Text>
-                    <FontAwesome name='caret-right' size={30} color={white} />
-                </TouchableOpacity>
+            <View style={sharedStyles.padding}>
+                <Text style={[sharedStyles.label, styles.label]}>
+                    Points:
+                </Text>
+                <TextInput
+                    style={styles.inputText}
+                    placeholder="100"
+                    placeholderTextColor={'#384B62'}
+                    onChangeText={(points) => this.setState({points: points})}
+                    value={`${points}`}
+                    keyboardType='numeric'
+                />
             </View>
+
+            {question && hasAnswer && (
+                <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+                    <TouchableOpacity onPress={this.saveCard} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
+                        <Text style={[sharedStyles.callToActionText, {color: white, marginRight: 30 }]}>
+                            Submit
+                        </Text>
+                        <FontAwesome name='caret-right' size={30} color={white} />
+                    </TouchableOpacity>
+                </View>
+            )}
 
         </ScrollView>
       </View>
@@ -151,7 +206,9 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteCardById: id => dispatch(deleteCard(id))
+    deleteCardById: id => dispatch(deleteCard(id)),
+    editCard: card => dispatch(editCard(card)),
+    createCard: card => dispatch(createCard(card))
   }
 }
 
@@ -162,4 +219,4 @@ function mapStateToProps({cards}) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateCard)
+)(CardCreate)

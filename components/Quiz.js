@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import { Text, StyleSheet, ScrollView, View } from 'react-native'
-import {eletricBlue, pink, white, green} from '../utils'
+import {eletricBlue, pink, white, green, getCardsFromReduxByDeck} from '../utils'
 import { connect } from 'react-redux'
 import Card from './Card'
 import ProgressBar from './ProgressBar'
@@ -11,8 +11,30 @@ class Quiz extends PureComponent {
   state = {
     deck : null,
     deckCards: [],
-    currentCard: false,
-    finished: false
+    currentCard: false
+  }
+
+  defineCurrentCard = () => {
+
+    const currentCard = [...this.state.deckCards].find(card => !card.answered)
+
+    if(!currentCard){
+      this.props.navigation.navigate('Finalization', {deck: this.state.deck})
+    }
+
+    this.setState( () => ({currentCard, finished: false}) )
+
+  }
+
+  setAnswered = id => {
+
+    const deckCards = [...this.state.deckCards].map(card => {
+      if(card.id === id){card.answered = true  }
+      return card
+    })
+
+    this.setState( () => ({deckCards, finished: false}), this.defineCurrentCard)
+
   }
 
   componentDidMount(){
@@ -20,47 +42,21 @@ class Quiz extends PureComponent {
     const { decks, navigation, cards } = this.props
     const deck = decks.find( deck => deck.id === navigation.state.params.data.id)
 
-    const deckCards = deck.cards.reduce( (prev, curr) => {
-        const card = cards.find( item => item.id === curr.id)
-        prev.push({...card, answered: curr.answered })
-        return prev
-    }, [])
+    const deckCards = getCardsFromReduxByDeck(deck.cards, cards)
 
     this.setState( () => ({deck, deckCards}), this.defineCurrentCard)
 
   }
 
-  defineCurrentCard = () => {
-    const currentCard = [...this.state.deckCards].find(card => !card.answered)
-    this.setState( () => ({
-      currentCard,
-      finished: currentCard ? false : true
-    }))
-  }
-
-  setAnswered = id => {
-
-    const deckCards = [...this.state.deckCards].map(card => {
-      if(card.id === id){
-        card.answered = true
-      }
-      return card
-    })
-
-    this.setState( () => ({deckCards}), this.defineCurrentCard)
-
-  }
 
   render() {
 
-    const {deck, currentCard, finished} = this.state
+    const {deck, currentCard} = this.state
 
     if(!deck){
       return (
         <View style={[styles.header, sharedStyles.padding]}>
-          <Text>
-            Loading
-          </Text>
+          <Text style={[styles.title, {fontSize: 60}]}>TESTE</Text>
         </View>
       )
     }
@@ -77,7 +73,6 @@ class Quiz extends PureComponent {
 
         <ScrollView contentContainerStyle={styles.container}>
           {currentCard && <Card data={{currentCard, deck}} callback={ () => this.setAnswered(currentCard.id)} />}
-          {finished && <Text style={styles.title}>Finished {deck.score}</Text>}
         </ScrollView>
       </View>
     );

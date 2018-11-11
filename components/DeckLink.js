@@ -33,8 +33,12 @@ class DeckLink extends PureComponent {
       <View style={[styles.wrapper, {position: 'relative'}]}>
 
         <View style={[styles.deckLink, sharedStyles[theme]]}>
+            <View style={sharedStyles.padding}>
+              <ProgressBar theme={theme} size="full" data={{numerator: data.answered, denominator: data.cards.length}} />
+            </View>
 
             <View style={sharedStyles.padding}>
+
                 <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
                     Subject:
                 </Text>
@@ -44,15 +48,17 @@ class DeckLink extends PureComponent {
                 </Text>
             </View>
 
-            <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+            {!data.finalized && (
+              <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+                  <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
+                      <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
+                          Go to the deck
+                      </Text>
+                      <FontAwesome name='caret-right' size={30} color={theme === 'purple' ? pink : white} />
+                  </TouchableOpacity>
+              </View>
+            )}
 
-                <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
-                    <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
-                        Go to the deck
-                    </Text>
-                    <FontAwesome name='caret-right' size={30} color={theme === 'purple' ? pink : white} />
-                </TouchableOpacity>
-            </View>
         </View>
 
         <View style={[sharedStyles.firstShadow, sharedStyles.shadow, sharedStyles[theme]]} />

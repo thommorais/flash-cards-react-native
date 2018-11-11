@@ -1,34 +1,84 @@
-import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
-import { pink, white, green} from '../utils'
-import {sharedStyles} from '../style'
+import React, {PureComponent} from 'react'
+import { StyleSheet, Animated, Image } from 'react-native'
+import { pink, green} from '../utils'
 
-export default function CardCommemoration(){
+export default class CardCommemoration extends PureComponent {
+
+  state = {
+    scale: new Animated.Value(1),
+    radius: new Animated.Value(180),
+    rotate: new Animated.Value(180),
+  }
+
+  componentDidMount(){
+    const {scale, radius} = this.state
+
+    Animated.parallel([
+
+      Animated.sequence([
+        Animated.timing(scale, {duration: 240, toValue: 1.05}),
+        Animated.timing(scale, {delay: 300, duration: 240, toValue: 0}),
+      ]),
+
+      Animated.sequence([
+        Animated.timing(radius, {duration: 240, toValue: 12}),
+        Animated.timing(radius, {delay: 300, duration: 230, toValue: 180}),
+      ]),
+
+    ]).start()
+
+  }
+
+  render(){
+    const {answer} = this.props
+    const {scale, radius} = this.state
+
     return (
-        <View style={[styles.card, sharedStyles.padding, styles.congrats, {height: 320}]}>
-            <Image source={require('../assets/comemoration.png')} />
-        </View>
+        <Animated.View style={[styles.congrats, answer ? styles.right : styles.wrong, {borderRadius: radius, transform: [{scale}] } ]}>
+
+          {answer && (
+              <Image
+                  style={{width: 180, height: 220}}
+                  source={require('../assets/positive.png')}
+                />
+          )}
+
+          {!answer && (
+              <Image
+                  style={{width: 180, height: 220}}
+                  source={require('../assets/negative.png')}
+                />
+          )}
+
+        </Animated.View>
     );
+  }
+
 }
 
 
 const styles = StyleSheet.create({
 
   congrats : {
-    backgroundColor: green,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-
-  card: {
-    position: "relative",
+    position: 'absolute',
     top: 0,
     left: 0,
-    borderRadius: 12,
-    backgroundColor: white,
-    minHeight: 150,
+    width: '100%',
+    height: '100%',
+    backgroundColor: pink,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
   },
+
+
+  wrong: {
+    backgroundColor: pink
+  },
+
+  right: {
+    backgroundColor: green
+  }
 
 });
 

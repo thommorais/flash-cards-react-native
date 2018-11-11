@@ -1,8 +1,12 @@
 import {
+        CREATE_CARD,
+        EDIT_CARD,
         DELETE_CARD,
         DELETE_DECK,
         CREATE_DECK,
         EDIT_DECK,
+        RESET_DECK,
+        FINISHED_DECK,
         SET_CARD_AS_ANSWERED_ON_DECK
     } from '../actions'
 
@@ -17,11 +21,10 @@ export default function cards(state = InitialState, action){
             return {
                 ...state,
                 decks : [
-                    ...state.decks,
-                    {...deck, }
+                     {...deck},
+                    ...state.decks
                 ]
             }
-
         }
 
         case EDIT_DECK : {
@@ -31,7 +34,37 @@ export default function cards(state = InitialState, action){
         }
 
         case DELETE_DECK : {
-            return {...state, decks : [...state.decks].filter(deck => deck.id !== action.id)}
+            const decks = [...state.decks].filter(({id}) => id !== action.id)
+            return {...state, decks}
+        }
+
+        case RESET_DECK : {
+            const {deck} = action
+            const decks = [...state.decks].filter( ({id}) => id !== deck.id )
+            return {...state, decks: [...decks, deck]}
+        }
+
+        case FINISHED_DECK : {
+            const {deck} = action
+            const decks = [...state.decks].filter( ({id}) => id !== deck.id )
+            return {...state, decks: [...decks, deck]}
+        }
+
+        case CREATE_CARD : {
+            const { card } = action
+            return {
+                ...state,
+                cards : [
+                    {...card},
+                    ...state.cards
+                ]
+            }
+        }
+
+        case EDIT_CARD : {
+            const { card } = action
+            const cards = [...state.cards].filter(({id}) => id !== card.id)
+            return {...state, cards: [...cards, card]}
         }
 
         case DELETE_CARD : {
@@ -56,7 +89,7 @@ export default function cards(state = InitialState, action){
             })
 
             deck.answered = ++deck.answered
-            deck.score = cardState.userAnswer ? deck.score + (10 / deck.cards.length) : deck.score
+            deck.score = cardState.userAnswer ? (deck.score + cardState.points) : deck.score
 
             return {
                 ...state,

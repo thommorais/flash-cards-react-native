@@ -1,32 +1,31 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import { Text, StyleSheet, View, Dimensions } from 'react-native'
 import { white, purple, yellow, pink} from '../utils'
 
-export default class ProgressBar extends React.PureComponent {
-  render() {
+export default function ProgressBar(props){
 
-    const {theme, size, data} = this.props
-    const textBarColor = theme === 'purple' ? pink : yellow
-    const {numerator, denominator} = data
-    // x = 1143 ÷ 2540 = 0,45
-    const bar = ( numerator / denominator) * 100
+  const {theme, data} = props
+  const textBarColor = theme === 'purple' ? pink : yellow
+  const {numerator, denominator} = data
+  // x = 1143 ÷ 2540 = 0,45
+  const bar = ( numerator / denominator) * 100
 
-    return (
-      <View style={[styles.bar,  {justifyContent: 'center'}]}>
+  return (
+    <View style={[styles.bar,  {justifyContent: 'center'}]}>
 
-        { bar <= 10 && <Text style={{color: purple, alignSelf: 'center', fontWeight: 'bold'}}>
-              {parseInt(bar)}%
-          </Text>}
+      { bar <= 15 && <Text style={{color: purple, alignSelf: 'center', fontWeight: 'bold'}}>
+            {parseInt(bar)}%
+        </Text>}
 
-        { bar > 10 && <View style={[styles.value, styles[theme], {width: `${bar}%`}]}>
-              <Text style={{color: textBarColor, fontWeight: 'bold'}}>
-                  {parseInt(bar)}%
-              </Text>
-          </View>}
+      { bar > 15 && <View style={[styles.value, styles[theme], {width: `${bar}%`}]}>
+            <Text style={{color: textBarColor, fontWeight: 'bold'}}>
+                {parseInt(bar)}%
+            </Text>
+        </View>}
 
-      </View>
-    );
-  }
+    </View>
+  );
+
 }
 
 const styles = StyleSheet.create({
@@ -34,6 +33,7 @@ const styles = StyleSheet.create({
   bar: {
     flex: 1,
     borderRadius: 20,
+    padding: 2,
     backgroundColor: white,
   },
 

@@ -5,7 +5,6 @@ import {eletricBlue, pink, white, purple, yellow} from '../utils'
 import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import {connect} from 'react-redux'
-import {deleteCard} from '../actions'
 
 class CarouselOfCards extends Component {
 
@@ -15,38 +14,35 @@ class CarouselOfCards extends Component {
     filteredCards: []
   }
 
-  deleteCardById = id => this.props.deleteCardById(id)
+  selectCardById = (id, points) => {
 
-  selectCardById = id => {
+    const { action, autoclose, cards } = this.props
 
-    const { action, autoclose } = this.props
+    action(id, points)
 
-    action(id)
-
-    if(this.state.currentIndex === (this.state.filteredCards.length - 1)){
+    if(this.state.selectedCards.length === ( cards.length - 1)){
       autoclose()
       return false
     }
 
     this.setState( (prevState) => ({
-        selectedCards: [...prevState.selectedCards, id],
-        currentIndex: prevState.currentIndex + 1
+        selectedCards: [...prevState.selectedCards, id]
     }))
 
   }
 
   componentDidMount(){
-
-    const { cards, hide } = this.props
-    const filteredCards = cards.filter( ({id}) => !hide.find( x => x.id === id))
-    this.setState( () => ({filteredCards}))
-
+    this.setState( () => ({
+        selectedCards: this.props.hide.map(x => x.id),
+    }))
   }
 
   render(){
 
-    const { purpose } = this.props
-    const { selectedCards, currentIndex, filteredCards} = this.state
+    const { cards } = this.props
+    const { currentIndex, selectedCards } = this.state
+    const filteredCards = cards.filter( ({id}) => !selectedCards.find( x => x === id) )
+
     const { width } = Dimensions.get('window')
 
     return (
@@ -65,32 +61,18 @@ class CarouselOfCards extends Component {
                 currentIndex={currentIndex}
                 style={[styles.card, {width: width - 40}, selectedCards.includes(item.id) && {opacity: 0.5}]}
               >
-
-                <View style={[styles.actions]}>
-                    <View style={{flexDirection: 'row'}}>
-                      <TouchableOpacity style={[sharedStyles.buttonTool, {borderColor: eletricBlue}]}>
-                            <FontAwesome name='pencil' size={20} color={eletricBlue} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.deleteCardById(item.id)} style={[sharedStyles.buttonTool, {borderColor: pink, marginLeft: 10}]}>
-                            <FontAwesome name='trash' size={20} color={pink} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
                 <Text style={[sharedStyles.label, styles.label]}>Question:</Text>
                 <Text style={[styles.bodyCopy]}>{item.question}</Text>
                 <Text style={[sharedStyles.label, styles.label]}>Answer:</Text>
-                <Text style={styles.bodyCopy}>{item.answer}</Text>
+                <Text style={styles.bodyCopy}>{item.answer ? item.answer.toString() : ''}</Text>
 
-                {purpose === 'selection' && !selectedCards.includes(item.id) &&  (
-                  <View style={{alignItems: 'flex-start', marginTop: 20}}>
-                      <TouchableOpacity onPress={() => this.selectCardById(item.id)} style={[sharedStyles.callToAction, {backgroundColor: purple }]}>
-                          <Text style={[sharedStyles.callToActionText, {color: white}]}>
-                              Select Card {currentIndex}
-                          </Text>
-                      </TouchableOpacity>
-                  </View>
-                )}
+                <View style={{alignItems: 'flex-start', marginTop: 20}}>
+                    <TouchableOpacity onPress={() => this.selectCardById(item.id, item.points)} style={[sharedStyles.callToAction, {backgroundColor: purple }]}>
+                        <Text style={[sharedStyles.callToActionText, {color: white}]}>
+                            Select Card
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
               </View>
 
@@ -113,7 +95,8 @@ const styles = StyleSheet.create({
     padding: 20,
     marginRight: 20,
     marginLeft: 20,
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
+    minHeight: 140
   },
 
   label: {
@@ -121,31 +104,18 @@ const styles = StyleSheet.create({
   },
 
   bodyCopy : {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20
   },
 
-  actions: {
-    marginBottom: 20,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'row'
-  }
 });
 
-
-const mapDispatchToProps = dispatch => {
-  return {
-    deleteCardById: id => dispatch(deleteCard(id))
-  }
-}
 
 function mapStateToProps({cards}) {
   return { cards }
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(CarouselOfCards)

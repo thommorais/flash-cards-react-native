@@ -44,7 +44,7 @@ export const sharedStyles = StyleSheet.create({
 
     callToActionText: {
         color: white,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold'
     },
 

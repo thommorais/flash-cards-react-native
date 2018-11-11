@@ -8,7 +8,7 @@ export default function CardObjectiveAnswer(props){
     const {answer, callback} = props
 
     return (
-        <View style={[styles.card, sharedStyles.padding]}>
+        <View style={[styles.card]}>
             <View>
               <Text style={styles.answerLabel}>
                 Answer:
@@ -23,12 +23,12 @@ export default function CardObjectiveAnswer(props){
             </Text>
             <View style={{flexDirection: 'row', marginTop: 20}}>
               <TouchableOpacity onPress={() => callback(true)} style={[sharedStyles.callToAction, {backgroundColor: green }]}>
-                <Text style={[sharedStyles.callToActionText, {fontSize: 24 }]}>
+                <Text style={[sharedStyles.callToActionText, {fontSize: 18 }]}>
                   👍 Right
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => callback(false)} style={[sharedStyles.callToAction, {marginLeft: 15}]}>
-                <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text['pink'], fontSize: 24}]}>
+                <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text['pink'], fontSize: 18}]}>
                   👎 Wrong
                 </Text>
               </TouchableOpacity>
@@ -41,12 +41,12 @@ export default function CardObjectiveAnswer(props){
 const styles = StyleSheet.create({
 
   card: {
-    position: "relative",
-    top: 0,
-    left: 0,
+    flex: 1,
+    width: '100%',
     borderRadius: 12,
+    minHeight: 280,
+    justifyContent: 'space-between',
     backgroundColor: white,
-    minHeight: 150,
   },
 
   answerLabel: {

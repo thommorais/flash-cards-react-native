@@ -4,8 +4,13 @@ import { connect } from 'react-redux'
 import { eletricBlue, pink, white, purple, yellow } from '../utils'
 import { sharedStyles, buttonBgColor } from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
+import { deleteCard } from '../actions'
 
 class CardsList extends PureComponent {
+
+  editCardById = card => {
+    this.props.navigation.navigate('CardCreate', {card, mode: 'edit'})
+  }
 
   render() {
 
@@ -14,24 +19,37 @@ class CardsList extends PureComponent {
     return (
       <View style={{flex: 1, backgroundColor: eletricBlue}}>
         <View style={sharedStyles.header}>
-          <TouchableOpacity  style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
+          <TouchableOpacity onPress={() => navigation.navigate('CardCreate', { mode: 'create'})} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
             <Text style={sharedStyles.headerButtonText}>Create Card</Text>
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.container}>
             {cards.map( card => (
               <View key={card.id} style={[sharedStyles.padding,styles.cardWrapper, styles.card]}>
-                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                    <TouchableOpacity onPress={this.deleteCartById} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor['pink']}]}>
+
+                <View style={{marginTop: 20, flex: 1}}>
+                  <Text style={[sharedStyles.callToActionText, {color:pink, fontSize: 24}]}>
+                    Question:
+                  </Text>
+                  <Text style={styles.bodyCopy}>{card.question}</Text>
+                </View>
+
+                <View style={{marginTop: 20, flex: 1}}>
+                  <Text style={[sharedStyles.callToActionText, {color:pink, fontSize: 24}]}>
+                    Answer:
+                  </Text>
+                  <Text style={{fontSize: 24}}>{card.answer.toString()}</Text>
+                </View>
+
+                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+                    <TouchableOpacity onPress={ () => this.props.deleteCardById(card.id)} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor['pink']}]}>
                         <FontAwesome name='trash' size={20} color={buttonBgColor['pink']} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.editCartById} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor['pink'], marginLeft: 16}]}>
+                    <TouchableOpacity onPress={() => this.editCardById(card)} style={[sharedStyles.buttonTool, {borderColor: buttonBgColor['pink'], marginLeft: 16}]}>
                         <FontAwesome name='pencil' size={20} color={buttonBgColor['pink']} />
                     </TouchableOpacity>
                 </View>
-                <View style={{marginTop: 20, flex: 1}}>
-                  <Text style={styles.bodyCopy}>{card.question}</Text>
-                </View>
+
               </View>
             ))}
         </ScrollView>
@@ -41,6 +59,10 @@ class CardsList extends PureComponent {
 }
 
 const styles = StyleSheet.create({
+
+  container: {
+    paddingBottom: 40
+  },
 
   cardWrapper: {
     position: "relative",
@@ -59,7 +81,7 @@ const styles = StyleSheet.create({
   },
 
   bodyCopy: {
-    fontSize: 32
+    fontSize: 26
   },
 
   shadow: {
@@ -70,12 +92,18 @@ const styles = StyleSheet.create({
 });
 
 
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteCardById: id => dispatch(deleteCard(id)),
+  }
+}
 
 function mapStateToProps({cards}) {
   return { cards }
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(CardsList)
 

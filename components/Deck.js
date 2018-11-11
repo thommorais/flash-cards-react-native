@@ -1,17 +1,23 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native'
 import ProgressBar from './ProgressBar'
-import { pink, white, eletricBlue} from '../utils'
+import { pink, white, eletricBlue, getCardsFromReduxByDeck} from '../utils'
 import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import { withNavigation } from 'react-navigation'
-import {deleteDeck} from '../actions'
+import {deleteDeck, createDeck} from '../actions'
 import {connect} from 'react-redux'
 
-class Deck extends PureComponent {
+class Deck extends Component {
+
+  state = {
+      totalPoints:  0,
+      deck : null
+  }
 
   deleteDeckById = () => {
     const {id} = this.props.navigation.state.params.data
+    this.props.navigation.navigate('DeckList')
     this.props.deleteDeckById(id)
   }
 
@@ -20,34 +26,61 @@ class Deck extends PureComponent {
     this.props.navigation.navigate('CreateDeck', {id, mode: 'edit'})
   }
 
-  navigate = () => {
+  startQuiz = () => {
     const {data} = this.props.navigation.state.params
     this.props.navigation.navigate('Quiz', {data})
   }
 
+  getDeckData(){
+    const {navigation, cards, decks} = this.props
+    const {data} = navigation.state.params
+
+    const deck = decks.find(deck => deck.id === data.id)
+
+    if(!deck) return false
+
+    const deckCards = getCardsFromReduxByDeck(deck.cards, cards)
+    const totalPoints = deckCards.reduce( (a, c) => a + parseInt(c.points), 0)
+
+    return {
+        totalPoints,
+        deckCards,
+        deck,
+        theme: data.theme,
+    }
+  }
+
   render() {
-    const {data} = this.props.navigation.state.params
-    const {theme} = data
+
+    const {theme, deck, deckCards, totalPoints} = this.getDeckData()
     const TextColor = theme === 'yellow' ? eletricBlue : white
 
-    return (
+    if(!deck){
+        return (
+            <View>
+                <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
+                    Loading
+                </Text>
+            </View>
+        )
+    }
 
+    return (
       <View style={{flex: 1, backgroundColor: eletricBlue}}>
         <ScrollView contentContainerStyle={styles.container}>
            <View style={[styles.wrapper, {position: 'relative'}]}>
 
              <View style={[styles.deckLink, sharedStyles[theme]]}>
                  <View style={sharedStyles.padding}>
-                     <ProgressBar theme={theme} size="full" data={{numerator: data.answered, denominator: data.cards.length}} />
+                     <ProgressBar theme={theme} size="full" data={{numerator: deck.answered, denominator: deckCards.length}} />
                  </View>
 
                  <View style={sharedStyles.padding}>
                      <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
                          Subject:
                      </Text>
-
                      <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
-                         {data.subject}
+                         {deck.subject}
                      </Text>
                  </View>
 
@@ -56,25 +89,24 @@ class Deck extends PureComponent {
                          <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
                              Number of cards:
                          </Text>
-
                          <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
-                             {data.cards.length}
+                             {deckCards.length}
                          </Text>
                       </View>
+
                      <View style={{marginLeft: 40}}>
                          <Text style={{fontSize: 16,  fontWeight: 'bold',  color:TextColor}}>
                              Score:
                          </Text>
-
                          <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
-                             {data.score.toFixed(1).replace(/\.0$/, '')}/10
+                             {deck.score}/{totalPoints}
                          </Text>
                       </View>
                  </View>
 
                  <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
 
-                     <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
+                     <TouchableOpacity onPress={this.startQuiz}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
                          <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
                              Start Quiz
                          </Text>
@@ -139,8 +171,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-function mapStateToProps({decks}) {
-  return { decks }
+function mapStateToProps({decks, cards}) {
+  return { decks, cards }
 }
 
 export default withNavigation(connect(

@@ -2,9 +2,8 @@ import React, {PureComponent} from 'react';
 import { TouchableOpacity, Text, StyleSheet, ScrollView, View } from 'react-native'
 import DeckLink from './DeckLink'
 import { connect } from 'react-redux'
-import { eletricBlue, pink, white, purple, yellow } from '../utils'
+import { eletricBlue, pink, white } from '../utils'
 import { sharedStyles } from '../style'
-import {deleteDeck} from '../actions'
 
 class DecksList extends PureComponent {
 
