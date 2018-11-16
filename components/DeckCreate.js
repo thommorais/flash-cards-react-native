@@ -5,9 +5,9 @@ import { sharedStyles, buttonBgColor } from '../style'
 import CarouselOfCards from './CarouselOfCards'
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons'
-import { createDeck, editDeck } from '../actions'
+import { deckCreate, editDeck } from '../actions'
 
-class CreateDeck extends React.PureComponent {
+class DeckCreate extends React.PureComponent {
   state = {
     subject: '',
     chooseCard: false,
@@ -16,13 +16,21 @@ class CreateDeck extends React.PureComponent {
   }
 
   saveDeck = () => {
+
     if (this.props.navigation.state.params.mode === 'edit') {
       this.props.editDeck({ ...this.state })
     } else {
-      this.props.createDeck({ ...this.state })
+      this.props.deckCreate({ ...this.state })
     }
 
-    this.props.navigation.goBack()
+    this.props.navigation.navigate('Deck', {data: { ...this.state } })
+     this.setState( () => ({
+          subject: '',
+          chooseCard: false,
+          cards: [],
+          id: null,
+        }
+      ))
   }
 
   removeCardById = id => {
@@ -208,7 +216,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
   return {
-    createDeck: deck => dispatch(createDeck(deck)),
+    deckCreate: deck => dispatch(deckCreate(deck)),
     editDeck: deck => dispatch(editDeck(deck)),
   }
 }
@@ -220,4 +228,4 @@ function mapStateToProps({ decks, cards }) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateDeck)
+)(DeckCreate)

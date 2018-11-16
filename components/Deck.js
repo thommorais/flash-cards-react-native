@@ -5,7 +5,7 @@ import { pink, white, eletricBlue, getCardsFromReduxByDeck} from '../utils'
 import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import { withNavigation } from 'react-navigation'
-import {deleteDeck, createDeck} from '../actions'
+import {deleteDeck, DeckCreate} from '../actions'
 import {connect} from 'react-redux'
 
 class Deck extends Component {
@@ -23,7 +23,7 @@ class Deck extends Component {
 
   editDeckById = () => {
     const {id} = this.props.navigation.state.params.data
-    this.props.navigation.navigate('CreateDeck', {id, mode: 'edit'})
+    this.props.navigation.navigate('DeckCreate', {id, mode: 'edit'})
   }
 
   startQuiz = () => {

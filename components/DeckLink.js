@@ -17,10 +17,10 @@ class DeckLink extends PureComponent {
 
   editDeckById = () => {
     const {id} = this.props.data
-    this.props.navigation.navigate('CreateDeck', {id, mode: 'edit'})
+    this.props.navigation.navigate('DeckCreate', {id, mode: 'edit'})
   }
 
-  navigate = () => {
+  goToDeck = () => {
     const {data} = this.props
     this.props.navigation.navigate('Deck', {data})
   }
@@ -50,7 +50,7 @@ class DeckLink extends PureComponent {
 
             {!data.finalized && (
               <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
-                  <TouchableOpacity onPress={this.navigate}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
+                  <TouchableOpacity onPress={this.goToDeck}  style={[sharedStyles.callToAction, {backgroundColor: buttonBgColor[theme]}]}>
                       <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text[theme], marginRight: 30 }]}>
                           Go to the deck
                       </Text>

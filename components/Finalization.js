@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
 
 });
 
-
 function mapStateToProps({cards, decks}) {
   return { cards, decks }
 }

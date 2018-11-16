@@ -69,16 +69,16 @@ export function deleteCard(id) {
 /*** DECKS ***/
 
 // create
-const createDeckAction = deck => {
+const deckCreateAction = deck => {
   return {
     type: CREATE_DECK,
     deck
   }
 }
 
-export function createDeck(deck) {
+export function deckCreate(deck) {
     return (dispatch) => {
-        dispatch(createDeckAction(deck))
+        dispatch(deckCreateAction(deck))
     }
 }
 

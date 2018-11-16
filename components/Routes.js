@@ -3,7 +3,7 @@ import DecksList from './DecksList'
 import Deck from './Deck'
 import CardsList from './CardsList'
 import Quiz from './Quiz'
-import CreateDeck from './CreateDeck'
+import DeckCreate from './DeckCreate'
 import CardCreate from './CardCreate'
 import Finalization from './Finalization'
 import { white, purple, pink } from '../utils'
@@ -80,8 +80,8 @@ const DecksTabs = createStackNavigator({
     },
   },
 
-  CreateDeck : {
-    screen: CreateDeck,
+  DeckCreate : {
+    screen: DeckCreate,
     navigationOptions: {
       title: 'Creating a Deck',
       ...headerStyles

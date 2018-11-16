@@ -14,7 +14,7 @@ class DecksList extends PureComponent {
     return (
       <View style={{flex: 1, backgroundColor: eletricBlue}}>
         <View style={sharedStyles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('CreateDeck', {mode : 'create'})} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
+          <TouchableOpacity onPress={() => navigation.navigate('DeckCreate', {mode : 'create'})} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
             <Text style={styles.headerButtonText}>Create Deck</Text>
           </TouchableOpacity>
         </View>
