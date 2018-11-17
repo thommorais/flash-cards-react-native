@@ -1,5 +1,8 @@
 # React Native Project: Mobile Flashcards
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 ## Description
 
 This is the third project for the [React Nanodegree](https://www.udacity.com/course/react-nanodegree--nd019).
