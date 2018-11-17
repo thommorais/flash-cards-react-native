@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity} from 'react-native'
-import { pink, white, green} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
+import { sharedStyles, buttonBgColor, pink, white, green } from '../style'
 
 export default function CardObjectiveAnswer(props){
 

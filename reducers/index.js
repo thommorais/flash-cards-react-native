@@ -14,82 +14,78 @@ import InitialState from './InitialState'
 
 export default function cards(state = InitialState, action){
 
-    switch(action.type){
+    const {type,  payload} = action
+
+    console.log(payload)
+
+    switch(type){
 
         case CREATE_DECK : {
-            const { deck } = action
             return {
                 ...state,
                 decks : [
-                     {...deck},
+                     {...payload},
                     ...state.decks
                 ]
             }
         }
 
         case EDIT_DECK : {
-            const { deck } = action
-            const decks = [...state.decks].filter(({id}) => id !== deck.id)
-            return {...state, decks: [...decks, deck]}
+            const decks = [...state.decks].filter(({id}) => id !== payload.id)
+            return {...state, decks: [...decks, payload]}
         }
 
         case DELETE_DECK : {
-            const decks = [...state.decks].filter(({id}) => id !== action.id)
+            const decks = [...state.decks].filter(({id}) => id !== payload)
             return {...state, decks}
         }
 
         case RESET_DECK : {
-            const {deck} = action
-            const decks = [...state.decks].filter( ({id}) => id !== deck.id )
-            return {...state, decks: [...decks, deck]}
+            const decks = [...state.decks].filter( ({id}) => id !== payload.id )
+            return {...state, decks: [...decks, payload]}
         }
 
         case FINISHED_DECK : {
-            const {deck} = action
-            const decks = [...state.decks].filter( ({id}) => id !== deck.id )
-            return {...state, decks: [...decks, deck]}
+            const decks = [...state.decks].filter( ({id}) => id !== payload.id )
+            return {...state, decks: [...decks, payload]}
         }
 
         case CREATE_CARD : {
-            const { card } = action
             return {
                 ...state,
                 cards : [
-                    {...card},
+                    {...payload},
                     ...state.cards
                 ]
             }
         }
 
         case EDIT_CARD : {
-            const { card } = action
-            const cards = [...state.cards].filter(({id}) => id !== card.id)
-            return {...state, cards: [...cards, card]}
+            const cards = [...state.cards].filter(({id}) => id !== payload.id)
+            return {...state, cards: [...cards, payload]}
         }
 
         case DELETE_CARD : {
-            return {...state, cards : [...state.cards].filter(card => card.id !== action.id)}
+            return {...state, cards : [...state.cards].filter(card => card.id !== payload)}
         }
 
         case SET_CARD_AS_ANSWERED_ON_DECK: {
 
-            const {cardState} = action
-
             const stateCopy = [...state.decks]
 
-            const deck = stateCopy.find(item => item.id === cardState.deck)
-            const decks = stateCopy.filter(item => item.id !== cardState.deck)
+            const deck = stateCopy.find(item => item.id === payload.deck)
+            const decks = stateCopy.filter(item => item.id !== payload.deck)
 
             deck.cards = [...deck.cards].map(card => {
-                if(card.id === cardState.card ){
+                if(card.id === payload.card ){
                     card.answered = true
-                    card.userAnswer = cardState.userAnswer
+                    card.userAnswer = payload.userAnswer
                 }
                 return card
             })
 
             deck.answered = ++deck.answered
-            deck.score = cardState.userAnswer ? (deck.score + cardState.points) : deck.score
+            deck.score = payload.userAnswer ? (deck.score + payload.points) : deck.score
 
             return {
                 ...state,

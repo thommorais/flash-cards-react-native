@@ -1,11 +1,9 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, Animated } from 'react-native'
-import { pink, white, green} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
+import { sharedStyles, buttonBgColor, white, green } from '../style'
 import { connect } from 'react-redux'
 import CardObjectiveAnswer from './CardObjectiveAnswer'
 import CardCommemoration from './CardCommemoration'
-
 import {setCardAsAnsweredOnDeck} from '../actions'
 
 class Card extends PureComponent {
@@ -50,7 +48,6 @@ class Card extends PureComponent {
       }, 1000)
 
   }
-
 
   triggerAnimation(delay){
 
@@ -98,7 +95,6 @@ class Card extends PureComponent {
                           👍 True
                         </Text>
                       </TouchableOpacity>
-
                       <TouchableOpacity onPress={() => this.handleAnswer(false)} style={[sharedStyles.callToAction]}>
                         <Text style={[sharedStyles.callToActionText, {color: buttonBgColor.text['pink'],fontSize: 18}]}>
                           👎 False
@@ -106,7 +102,6 @@ class Card extends PureComponent {
                       </TouchableOpacity>
                     </View>
                   )}
-
                 </Animated.View>
               )}
 
@@ -129,20 +124,6 @@ class Card extends PureComponent {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        setCardAsAnsweredOnDeck : ids => dispatch(setCardAsAnsweredOnDeck(ids))
-    }
-}
-
-function mapStateToProps({cards, decks}) {
-  return { cards, decks }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Card)
 
 const styles = StyleSheet.create({
 
@@ -178,3 +159,19 @@ const styles = StyleSheet.create({
 
 });
 
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setCardAsAnsweredOnDeck : ids => dispatch(setCardAsAnsweredOnDeck(ids))
+    }
+}
+
+function mapStateToProps({cards, decks}) {
+  return { cards, decks }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Card)

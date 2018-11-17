@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native'
 import SideSwipe from 'react-native-sideswipe'
-import {eletricBlue, pink, white, purple, yellow} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
-import { FontAwesome  } from '@expo/vector-icons'
 import {connect} from 'react-redux'
+import { sharedStyles, pink, white, purple } from '../style'
 
 class CarouselOfCards extends Component {
 
@@ -64,7 +62,7 @@ class CarouselOfCards extends Component {
                 <Text style={[sharedStyles.label, styles.label]}>Question:</Text>
                 <Text style={[styles.bodyCopy]}>{item.question}</Text>
                 <Text style={[sharedStyles.label, styles.label]}>Answer:</Text>
-                <Text style={styles.bodyCopy}>{item.answer ? item.answer.toString() : ''}</Text>
+                <Text style={styles.bodyCopy}>{item.answer.toString()}</Text>
 
                 <View style={{alignItems: 'flex-start', marginTop: 20}}>
                     <TouchableOpacity onPress={() => this.selectCardById(item.id, item.points)} style={[sharedStyles.callToAction, {backgroundColor: purple }]}>

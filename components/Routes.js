@@ -6,10 +6,10 @@ import Quiz from './Quiz'
 import DeckCreate from './DeckCreate'
 import CardCreate from './CardCreate'
 import Finalization from './Finalization'
-import { white, purple, pink } from '../utils'
-import {Easing, Animated } from 'react-native'
+import { white, purple, pink } from '../style'
+import { Easing, Animated } from 'react-native'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const transitionConfig = () => {
   return {

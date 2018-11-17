@@ -1,10 +1,9 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { TouchableOpacity, Text, StyleSheet, ScrollView, View } from 'react-native'
 import { connect } from 'react-redux'
-import { eletricBlue, pink, white, purple, yellow } from '../utils'
-import { sharedStyles, buttonBgColor } from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import { deleteCard } from '../actions'
+import { sharedStyles, buttonBgColor, eletricBlue, pink, white } from '../style'
 
 class CardsList extends PureComponent {
 

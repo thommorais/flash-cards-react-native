@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native'
 import ProgressBar from './ProgressBar'
-import { pink, white, eletricBlue, getCardsFromReduxByDeck} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
+import { getCardsFromReduxByDeck } from '../utils'
 import { FontAwesome  } from '@expo/vector-icons'
 import { withNavigation } from 'react-navigation'
-import {deleteDeck, DeckCreate} from '../actions'
-import {connect} from 'react-redux'
+import { deleteDeck } from '../actions'
+import { connect } from 'react-redux'
+import { sharedStyles, buttonBgColor, pink, white, eletricBlue } from '../style'
 
 class Deck extends Component {
 
@@ -99,7 +99,7 @@ class Deck extends Component {
                              Score:
                          </Text>
                          <Text style={{fontSize: 32, fontWeight: 'bold', color:TextColor}}>
-                             {deck.score}/{totalPoints}
+                             {deck.score}/{!!totalPoints ? totalPoints : 0}
                          </Text>
                       </View>
                  </View>

@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity } from 'react-native'
-import {eletricBlue, pink, white, green, getCardsFromReduxByDeck} from '../utils'
+import React, { PureComponent } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { getCardsFromReduxByDeck } from '../utils'
 import { connect } from 'react-redux'
-import {sharedStyles, buttonBgColor} from '../style'
-import { FontAwesome  } from '@expo/vector-icons'
-import {resetDeck} from '../actions'
+import { sharedStyles, buttonBgColor, eletricBlue, pink, white, green } from '../style'
+import { FontAwesome } from '@expo/vector-icons'
+import { resetDeck } from '../actions'
 import { withNavigation } from 'react-navigation'
 
 class Finalization extends PureComponent {

@@ -13,16 +13,13 @@ export function clearLocalNotification() {
 /**
  * Accreditation: code taken from Udacity React Native 'UdaciFitness' lessons
  */
-function setNotification() {
-  return {
-    title: 'Your big test is comming up',
-    body: 'Don\'t forget to take a quiz today,',
-    ios: {
-      sound: true,
-    },
-  };
-}
-
+const setNotification = {
+  title: 'Your big test is comming up',
+  body: 'Don\'t forget to take a quiz today,',
+  ios: {
+    sound: true,
+  },
+};
 
 export function setLocalNotification() {
   AsyncStorage.getItem(NOTIFICATION_KEY)
@@ -38,7 +35,7 @@ export function setLocalNotification() {
               tomorrow.setHours(14)
               tomorrow.setMinutes(30)
 
-            Notifications.scheduleLocalNotificationAsync(setNotification(), {
+            Notifications.scheduleLocalNotificationAsync(setNotification, {
                 time: tomorrow,
                 repeat: 'day',
             });

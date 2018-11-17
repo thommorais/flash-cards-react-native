@@ -4,9 +4,9 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import reducer from './reducers'
 import {View, StatusBar} from 'react-native'
-import { purple, pink } from './utils'
+import { purple, pink } from './style'
 import MainNavigator from './components/Routes'
-import {setLocalNotification, clearLocalNotification} from './notifications'
+import { setLocalNotification, clearLocalNotification } from './notifications'
 
 const store = createStore(
   reducer,

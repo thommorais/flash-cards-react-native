@@ -1,12 +1,11 @@
 import React, {PureComponent} from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import ProgressBar from './ProgressBar'
-import { pink, white, eletricBlue} from '../utils'
-import {sharedStyles, buttonBgColor} from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
 import { withNavigation } from 'react-navigation'
 import {deleteDeck} from '../actions'
 import {connect} from 'react-redux'
+import { sharedStyles, buttonBgColor, pink, white, eletricBlue } from '../style'
 
 class DeckLink extends PureComponent {
 

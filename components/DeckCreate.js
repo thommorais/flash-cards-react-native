@@ -1,11 +1,11 @@
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet, ScrollView, View, TextInput } from 'react-native'
-import { eletricBlue, pink, white, purple, yellow, green, getCardsFromReduxByDeck } from '../utils'
-import { sharedStyles, buttonBgColor } from '../style'
+import { getCardsFromReduxByDeck } from '../utils'
 import CarouselOfCards from './CarouselOfCards'
 import { connect } from 'react-redux'
 import { FontAwesome } from '@expo/vector-icons'
 import { deckCreate, editDeck } from '../actions'
+import { sharedStyles, buttonBgColor, eletricBlue, pink, white, purple, yellow } from '../style'
 
 class DeckCreate extends React.PureComponent {
   state = {

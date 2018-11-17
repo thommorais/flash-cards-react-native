@@ -14,7 +14,7 @@ export const SET_CARD_AS_ANSWERED_ON_DECK = 'SET_CARD_AS_ANSWERED_ON_DECK'
 const setCardAsAnsweredOnDeckAction = cardState => {
   return {
     type: SET_CARD_AS_ANSWERED_ON_DECK,
-    cardState
+    payload:cardState
   }
 }
 
@@ -28,7 +28,7 @@ export function setCardAsAnsweredOnDeck(cardState) {
 const createCardAction = card => {
   return {
     type: CREATE_CARD,
-    card
+    payload: card
   }
 }
 
@@ -42,7 +42,7 @@ export function createCard(card) {
 const editCardAction = card => {
   return {
     type: EDIT_CARD,
-    card
+    payload: card
   }
 }
 
@@ -56,7 +56,7 @@ export function editCard(card) {
 const deleteCardAction = id => {
   return {
     type: DELETE_CARD,
-    id
+    payload:id
   }
 }
 export function deleteCard(id) {
@@ -72,7 +72,7 @@ export function deleteCard(id) {
 const deckCreateAction = deck => {
   return {
     type: CREATE_DECK,
-    deck
+    payload: deck
   }
 }
 
@@ -86,7 +86,7 @@ export function deckCreate(deck) {
 const editDeckAction = deck => {
   return {
     type: EDIT_DECK,
-    deck
+    payload:deck
   }
 }
 
@@ -101,7 +101,7 @@ export function editDeck(deck) {
 const deleteDeckAction = id => {
   return {
     type: DELETE_DECK,
-    id
+    payload: id
   }
 }
 
@@ -116,7 +116,7 @@ export function deleteDeck(id) {
 const resetDeckAction = deck => {
   return {
     type: RESET_DECK,
-    deck
+    payload:deck
   }
 }
 
@@ -131,7 +131,7 @@ export function resetDeck(deck) {
 const finishedDeckAction = deck => {
   return {
     type: FINISHED_DECK,
-    deck
+    payload: deck
   }
 }
 

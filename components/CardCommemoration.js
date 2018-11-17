@@ -1,6 +1,6 @@
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import { StyleSheet, Animated, Image } from 'react-native'
-import { pink, green} from '../utils'
+import { pink, green } from '../style'
 
 export default class CardCommemoration extends PureComponent {
 
@@ -38,14 +38,14 @@ export default class CardCommemoration extends PureComponent {
 
           {answer && (
               <Image
-                  style={{width: 180, height: 220}}
+                  style={styles.image}
                   source={require('../assets/positive.png')}
                 />
           )}
 
           {!answer && (
               <Image
-                  style={{width: 180, height: 220}}
+                  style={styles.image}
                   source={require('../assets/negative.png')}
                 />
           )}
@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
+  image: {
+    width: 180,
+    height: 220
+  },
 
   wrong: {
     backgroundColor: pink

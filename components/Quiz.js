@@ -1,10 +1,10 @@
 import React, {PureComponent} from 'react';
 import { Text, StyleSheet, ScrollView, View } from 'react-native'
-import {eletricBlue, pink, white, green, getCardsFromReduxByDeck} from '../utils'
+import { getCardsFromReduxByDeck } from '../utils'
 import { connect } from 'react-redux'
 import Card from './Card'
 import ProgressBar from './ProgressBar'
-import { sharedStyles } from '../style'
+import { sharedStyles, eletricBlue, white } from '../style'
 
 class Quiz extends PureComponent {
 
@@ -56,7 +56,7 @@ class Quiz extends PureComponent {
     if(!deck){
       return (
         <View style={[styles.header, sharedStyles.padding]}>
-          <Text style={[styles.title, {fontSize: 60}]}>TESTE</Text>
+          <Text style={[styles.title, {fontSize: 60}]}>Loading</Text>
         </View>
       )
     }

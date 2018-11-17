@@ -1,11 +1,10 @@
-import React, {PureComponent} from 'react';
-import { TouchableOpacity, Text, StyleSheet, ScrollView, View, TextInput, KeyboardAvoidingView } from 'react-native'
-import {eletricBlue, pink, white, yellow } from '../utils'
+import React, { PureComponent } from 'react';
 import CheckBox from 'react-native-checkbox'
-import { sharedStyles } from '../style'
+import { TouchableOpacity, Text, StyleSheet, ScrollView, View, TextInput, KeyboardAvoidingView } from 'react-native'
+import { sharedStyles, eletricBlue, pink, white, yellow  } from '../style'
 import { FontAwesome  } from '@expo/vector-icons'
-import {connect} from 'react-redux'
-import {deleteCard, editCard, createCard} from '../actions'
+import { connect } from 'react-redux'
+import { deleteCard, editCard, createCard } from '../actions'
 
 class CardCreate extends PureComponent {
 
@@ -155,7 +154,7 @@ class CardCreate extends PureComponent {
                 </View>
 
                 {question && hasAnswer && points && (
-                    <View style={[sharedStyles.padding, {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+                    <View style={[sharedStyles.padding, styles.buttonWrapper]}>
                         <TouchableOpacity onPress={this.saveCard} style={[sharedStyles.callToAction, {backgroundColor: pink}]}>
                             <Text style={[sharedStyles.callToActionText, {color: white, marginRight: 30 }]}>
                                 Submit
@@ -201,6 +200,13 @@ const styles = StyleSheet.create({
       paddingTop: 5,
       paddingBottom: 5,
       color: white,
+  },
+
+  buttonWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 
 });
